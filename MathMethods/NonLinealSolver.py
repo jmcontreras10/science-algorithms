@@ -11,8 +11,8 @@ import sys
 #   Inputs:
 #       fx: Function to find root
 #       root: Root to find a solution
-#       Tx: Tolerance in x
-#       Tf: Tolerance in f
+#       x0: x0 point
+#       x1: x1 point
 def bisectionMethod(fx, val, x0, x1):
     #   It defines the tolerances
     Tx = 10**-5
@@ -49,8 +49,8 @@ def bisectionMethod(fx, val, x0, x1):
 #   Inputs:
 #       fx: Function to find root
 #       root: Root to find a solution
-#       Tx: Tolerance in x
-#       Tf: Tolerance in f
+#       x0: x0 point
+#       x1: x1 point
 def fakePosMethod(fx, val, x0, x1):
     #   It defines the tolerances
     Tx = 10**-5
@@ -88,8 +88,8 @@ def fakePosMethod(fx, val, x0, x1):
 #       fx: Function to find root
 #       gx: Function to available
 #       root: Root to find a solution
-#       Tx: Tolerance in x
-#       Tf: Tolerance in f
+#       x0: x0 point
+#       x1: x1 point
 def fixedPointMethod(fx, gx, val, x0, x1):
     #   It defines the tolerances
     Tx = 10**-5
@@ -123,8 +123,8 @@ def fixedPointMethod(fx, gx, val, x0, x1):
 #       fx: Function to find root
 #       fdx: Derivative of function to find root 
 #       root: Root to find a solution
-#       Tx: Tolerance in x
-#       Tf: Tolerance in f
+#       x0: x0 point
+#       x1: x1 point
 def newtonMethod(fx, fdx, val, x0, x1):
     #   It defines the tolerances
     Tx = 10**-5
@@ -146,6 +146,40 @@ def newtonMethod(fx, fdx, val, x0, x1):
         if np.abs(fx(x2)) <= Tf:
             break
         #   It updates the intervals
+        x1 = x2
+        root = x2
+        
+    return root, iter
+
+##
+#   Secant Method find the solution root in which f(root) = val
+#   Inputs:
+#       fx: Function to find root
+#       root: Root to find a solution
+#       x0: x0 point
+#       x1: x1 point
+def secantMethod(fx, val, x0, x1):
+    #   It defines the tolerances
+    Tx = 10**-5
+    Tf = Tx
+    #   It defines the final root
+    root = x1
+    #   It iterates while true :V
+    iter = 0
+    while 1:
+        #   It sums one iteration
+        iter += 1
+        #   It calculates the current root using:
+        x2 = x1 - (fx(x1)*(x1-x0))/(fx(x1)-fx(x0))
+        
+        #   It evaluates the tolernce criterium on x
+        if np.abs(x2 - root) <= Tx:
+            break
+        #   It evaluates the tolernce criterium on y
+        if np.abs(fx(x2)) <= Tf:
+            break
+        #   It updates the intervals
+        x0 = x1
         x1 = x2
         root = x2
         
@@ -206,6 +240,18 @@ if len(sys.argv) > 1:
         plt.annotate("Newton", (root, 0))
         plt.plot(root, 0, 'yo')
         plt.grid(1)
+        
+                
+        print('Using the secant method:')
+        val = 0
+        x0 = 2.0
+        x1 = 1.9
+        root, iter = secantMethod(fx, val, x0, x1)
+        print('The root is {:.5f}, and it was using {:d} iterations.'.format(root,iter))
+        plt.annotate("Secant", (root, 0))
+        plt.plot(root, 0, 'co')
+        plt.grid(1)
+        
         
         
         plt.show()
