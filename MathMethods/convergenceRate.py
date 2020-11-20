@@ -58,6 +58,7 @@ if len(sys.argv) > 1:
         x0 = 1.0
         x1 = 2.0
         root, iter, xr_iter = convergenceRateBisection(fx, val, x0, x1)
+        print(xr_iter)
         print('The root is {:.5f}, and it was using {:d} iterations.'.format(root,iter))
         #   It calculates the 'true' root value
         xroot_true = opt.fsolve(fx, x1)
