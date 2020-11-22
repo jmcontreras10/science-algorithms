@@ -6,18 +6,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-
 ##
 #   Gives the values to build the linear regression ecuation
 #   Inputs:
-def alculateRoots2x2(x1i0, x2i0, A, f1, f2, TolX, TolY):
+def calculateRoots2x2(x1i0, x2i0, Jacobian, f1, f2, TolX, TolY):
+    
     #   It defines the number of iterations
-    x1 = 0
-    x2 = 0
+    x1, x2 = 0, 0
     iter = 0
     while 1:
         #   Lets sum in iters
         iter += 1
+        A = Jacobian(x1i0,x2i0)
         #   set the b Vector
         b = np.zeros([2,1])
         b[0] = -f1(x1i0, x2i0)
@@ -44,10 +44,12 @@ def alculateRoots2x2(x1i0, x2i0, A, f1, f2, TolX, TolY):
 
 #   Test
 if len(sys.argv) > 1:
-    if sys.argv[1] == '-t':
+    
+    if sys.argv[1] == '-p':
+        
         #   It defines the function f1
         f1 = lambda x1, x2: 3.0*np.exp(-(x1**2.0))-5.0*(x2**(1.0/3.0))+6.0
-        
+
         #   It defines the function f2
         f2 = lambda x1, x2: 3.0*x1+0.5*(x2**(1.0/4.0))-15.0
         
@@ -88,6 +90,14 @@ if len(sys.argv) > 1:
         plt.ylabel('x2')
         plt.show()
         
+    elif sys.argv[1] == '-t':
+        
+        #   It defines the function f1
+        f1 = lambda x1, x2: 3.0*np.exp(-(x1**2.0))-5.0*(x2**(1.0/3.0))+6.0
+
+        #   It defines the function f2
+        f2 = lambda x1, x2: 3.0*x1+0.5*(x2**(1.0/4.0))-15.0
+        
         #   Now it defines Jacobian Matrix
         def Jaco(x1,x2):
             A = np.zeros([2,2])
@@ -100,9 +110,10 @@ if len(sys.argv) > 1:
         #   It defines the initial points
         x1i0 = 5.0
         x2i0 = 2.0
+        
         #   It defines the tolerance values
         TolX = 10**-5
         TolY = 10**-5
 
-        alculateRoots2x2(x1i0,x2i0, Jaco(x1i0, x2i0), f1, f2, TolX, TolY)
+        calculateRoots2x2(x1i0, x2i0, Jaco, f1, f2, TolX, TolY)
 

@@ -14,7 +14,7 @@ def set_numpy_decimal_places(places, width=0):
 ##
 #   Gives the values to build the linear regression ecuation
 #   Inputs:
-def calculateRoots(xi0, A, fs, TolX, TolY):
+def calculateRoots(xi0, Jacobian, fs, TolX, TolY):
     xi0 = xi0.reshape((np.size(xi0),1))
     x = np.zeros([len(fs),1])
     #   It defines the number of iterations
@@ -22,6 +22,7 @@ def calculateRoots(xi0, A, fs, TolX, TolY):
     while 1:
         #   Lets sum in iters
         iter += 1
+        A = Jacobian(xi0)
         #   set the b Vector
         b = np.zeros([len(fs),1])
         
@@ -56,16 +57,12 @@ def calculateRoots(xi0, A, fs, TolX, TolY):
 
 #   Test
 if len(sys.argv) > 1:
-    if sys.argv[1] == '-t':
+    if sys.argv[1] == '-p':
         #   It defines the function f1
         f1 = lambda x: 3.0*np.exp(-(x[0]**2.0))-5.0*(x[1]**(1.0/3.0))+6.0
         
         #   It defines the function f2
         f2 = lambda x: 3.0*x[0]+0.5*(x[1]**(1.0/4.0))-15.0
-        
-        #   It defines the function in array
-        fs = [f1,f2]
-        
         #   Let's plot to look for two good points
         delta = 0.1
         #   x1
@@ -103,6 +100,17 @@ if len(sys.argv) > 1:
         plt.ylabel('x2')
         plt.show()
         
+        
+    if sys.argv[1] == '-t':
+        #   It defines the function f1
+        f1 = lambda x: 3.0*np.exp(-(x[0]**2.0))-5.0*(x[1]**(1.0/3.0))+6.0
+        
+        #   It defines the function f2
+        f2 = lambda x: 3.0*x[0]+0.5*(x[1]**(1.0/4.0))-15.0
+        
+        #   It defines the function in array
+        fs = [f1,f2]
+        
         #   Now it defines Jacobian Matrix
         def Jaco(x):
             A = np.zeros([np.size(x),np.size(x)])
@@ -118,5 +126,5 @@ if len(sys.argv) > 1:
         TolX = 10.0**-5
         TolY = 10.0**-5
 
-        calculateRoots(xi0, Jaco(xi0), fs, TolX, TolY)
+        calculateRoots(xi0, Jaco, fs, TolX, TolY)
 
