@@ -1,6 +1,8 @@
 #   Author: jmcontreras10
 #   Using concepts learned in IBIO2240: scientific programming 
 
+#   This Excercice is Wrong!!
+
 from matplotlib import colors
 import numpy as np
 import matplotlib.pyplot as plt
